@@ -12,32 +12,8 @@ const {
 
 const {books, authors} = require('./data/sample')
 
-const BookType = new GraphQLObjectType({
-    name: 'Book',
-    description: 'Represent a book',
-    fields: () => ({
-        id: { type: GraphQLNonNull(GraphQLInt) },
-        name: { type: GraphQLNonNull(GraphQLString) },
-        authorId: { type: GraphQLNonNull(GraphQLInt) },
-        author: {
-            type: AuthorType,
-            resolve: (book) => authors.find(author => author.id === book.authorId)
-        }
-    })
-})
-
-const AuthorType = new GraphQLObjectType({
-    name: 'Authors',
-    description: 'List of authors',
-    fields: () => ({
-        id: { type: GraphQLNonNull(GraphQLInt) },
-        name: { type: GraphQLNonNull(GraphQLString) },
-        books: {
-            type: GraphQLList(BookType),
-            resolve: (author) => books.filter(book => book.authorId === author.id)
-        }
-    })
-})
+const BookType = require('./queries/bookType')
+const AuthorType = require('./queries/authorType')
 
 const RootQueryType = new GraphQLObjectType({
     name: 'Query',
